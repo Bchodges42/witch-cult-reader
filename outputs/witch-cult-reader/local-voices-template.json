@@ -1,5 +1,5 @@
 {
-  "_readme": "Voice presets for the Local AI server engine. GPT-SoVITS: each voice is {ref, prompt, lang} - a short clip of the character on your desktop plus what the clip says. Style-Bert-VITS2: each voice is {model, style} using model names from its models folder. narrator is required; any character left out falls back to narrator. ??? covers masked speakers.",
+  "_readme": "Voice presets for the Local AI server engine. GPT-SoVITS zero-shot: {ref, prompt, lang} - a short clip of the character on your desktop plus what the clip says. GPT-SoVITS trained character pack: also add gpt (.ckpt path) and sovits (.pth path) from the pack - the extension switches weights automatically on speaker changes. Style-Bert-VITS2: {model, style}. narrator is required; characters left out fall back to narrator. ??? covers masked speakers.",
   "narrator": {"ref": "C:/voices/narrator.wav", "prompt": "what the narrator clip says", "lang": "ja"},
   "Subaru": {"ref": "C:/voices/subaru.wav", "prompt": "what the Subaru clip says", "lang": "ja"},
   "Emilia": {"ref": "C:/voices/emilia.wav", "prompt": "what the Emilia clip says", "lang": "ja"},

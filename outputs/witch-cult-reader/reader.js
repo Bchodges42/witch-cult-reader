@@ -226,7 +226,7 @@ renderJump();
 // ---- read aloud: engine ----
 if (synth) {
   const tts = state.tts;
-  const speaking = {seq: [], i: 0, queue: [], on: false, paused: false, busy: false, para: null, gen: 0, audio: null, pre: null};
+  const speaking = {seq: [], i: 0, queue: [], on: false, paused: false, busy: false, para: null, gen: 0, audio: null, pre: null, weights: null};
   let voices = synth.getVoices().slice();
   let lastUserScroll = 0;
   window.addEventListener('wheel', () => { lastUserScroll = Date.now(); }, {passive: true});
@@ -279,7 +279,7 @@ if (synth) {
         const chip = document.createElement('span'); chip.className = 'wcr-cast-name'; chip.textContent = name; chip.style.setProperty('--h', hue(name));
         const status = document.createElement('span'); status.className = 'wcr-voice-status';
         const v = pre[name];
-        status.textContent = v && (v.ref || v.model) ? (v.model ? v.model : 'own voice') : '\u2192 narrator';
+        status.textContent = v && v.gpt ? 'character pack' : v && (v.ref || v.model) ? (v.model ? v.model : 'own voice') : '\u2192 narrator';
         if (!(v && (v.ref || v.model))) status.classList.add('wcr-voice-fallback');
         row.append(chip, status); rows.append(row);
       }
@@ -338,6 +338,17 @@ if (synth) {
     const params = new URLSearchParams({model: v.model, text: item.text, language: 'EN', length: String(1 / rate)});
     if (v.style) params.set('style', v.style);
     return {url: base + '/voice?' + params.toString(), init: {method: 'POST'}};
+  }
+  // Optional trained character packs: {gpt, sovits} weight paths, loaded on speaker change.
+  const weightKeyOf = v => v && ((v.gpt || '') + '|' + (v.sovits || ''));
+  async function ensureWeights(v) {
+    const key = weightKeyOf(v);
+    if (!key || key === '|') return;
+    if (speaking.weights === key) return;
+    const base = (tts.local.url || '').trim().replace(/\/+$/, '');
+    await proxyFetch(base + '/set_gpt_weights?weights_path=' + encodeURIComponent(v.gpt), {method: 'GET'});
+    await proxyFetch(base + '/set_sovits_weights?weights_path=' + encodeURIComponent(v.sovits), {method: 'GET'});
+    speaking.weights = key;
   }
   function proxyFetch(url, init) {
     return new Promise((resolve, reject) => {
@@ -406,7 +417,7 @@ if (synth) {
   }
   function finishSpeaking() {
     speaking.on = false; speaking.paused = false; speaking.queue = []; speaking.busy = false;
-    speaking.gen = (speaking.gen || 0) + 1; speaking.pre = null;
+    speaking.gen = (speaking.gen || 0) + 1; speaking.pre = null; speaking.weights = null;
     synth.cancel();
     if (speaking.audio) { try { speaking.audio.pause(); speaking.audio.src = ''; } catch {} speaking.audio = null; }
     if (speaking.para) speaking.para.classList.remove('wcr-speaking');
@@ -417,9 +428,11 @@ if (synth) {
     const req = localRequest(item);
     return proxyFetch(req.url, req.init);
   }
-  function prefetchNext() {
+  function prefetchNext(currentVoice) {
     const next = speaking.queue[0];
     if (!next || (speaking.pre && speaking.pre.item === next)) return;
+    const nextKey = weightKeyOf(next.lvoice), curKey = weightKeyOf(currentVoice) || null;
+    if (nextKey && nextKey !== curKey) return; // needs a weight switch first; no prefetch
     try { const req = localRequest(next); speaking.pre = {item: next, promise: proxyFetch(req.url, req.init)}; }
     catch {}
   }
@@ -427,6 +440,8 @@ if (synth) {
     const gen = speaking.gen;
     speaking.busy = true;
     try {
+      await ensureWeights(item.lvoice || (tts.local.presets && tts.local.presets.narrator));
+      if (gen !== speaking.gen || !speaking.on || speaking.paused) { speaking.busy = false; return; }
       const resp = await audioForItem(item);
       if (gen !== speaking.gen || !speaking.on || speaking.paused) { speaking.busy = false; return; }
       const blob = new Blob([resp.body], {type: (resp.contentType || 'audio/wav').split(';')[0]});
@@ -437,7 +452,7 @@ if (synth) {
       audio.onended = () => { URL.revokeObjectURL(url); if (speaking.audio === audio) speaking.audio = null; if (speaking.on && !speaking.paused) speakNext(); };
       audio.onerror = () => { URL.revokeObjectURL(url); if (speaking.audio === audio) speaking.audio = null; };
       await audio.play();
-      prefetchNext();
+      prefetchNext(item.lvoice || (tts.local.presets && tts.local.presets.narrator));
     } catch (err) {
       speaking.busy = false;
       if (gen !== speaking.gen) return;

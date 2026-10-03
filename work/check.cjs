@@ -300,3 +300,32 @@ function bootLocal(){
   console.log('PASS: local AI engine — proxy routing, per-character refs (Rem/???/narrator), server-side speed, error surfacing, SBV2 shape.');
   dom.window.close();
 })().catch(e=>{console.error(e);process.exit(1)});
+
+// ---- character packs: automatic weight switching ----
+(async()=>{
+  const dom=bootLocal(),w=dom.window,d=w.document;
+  const eng=d.querySelector('#wcr-engine');eng.value='local';eng.dispatchEvent(new w.Event('input'));
+  const presets={narrator:{ref:'C:/v/n.wav',prompt:'n',lang:'en'},
+    Rem:{gpt:'C:/packs/rem.ckpt',sovits:'C:/packs/rem.pth',ref:'C:/packs/rem.wav',prompt:'r',lang:'ja'},
+    Emilia:{gpt:'C:/packs/emi.ckpt',sovits:'C:/packs/emi.pth',ref:'C:/packs/emi.wav',prompt:'e',lang:'ja'}};
+  d.querySelector('#wcr-presets').value=JSON.stringify(presets);
+  d.querySelector('#wcr-save-presets').click();
+  assert([...d.querySelectorAll('.wcr-voice-status')].some(x=>x.textContent==='character pack'),'rows mark packs');
+  const remLine=[...d.querySelectorAll('.wcr-dialogue[data-speaker="Rem"]')].find(p=>p.textContent.length>30);
+  remLine.click();
+  await sleep(80+200);
+  const calls=w.proxyCalls.map(c=>c.url);
+  const setIdx=calls.findIndex(u=>u.includes('set_gpt_weights')&&u.includes('rem.ckpt'));
+  const ttsIdx=calls.findIndex(u=>u.endsWith('/tts'));
+  assert(setIdx>-1&&setIdx<ttsIdx,'pack weights load before synthesis');
+  assert(calls.some(u=>u.includes('set_sovits_weights')&&u.includes('rem.pth')),'sovits weights loaded');
+  const remTts=calls.filter((u,i)=>u.endsWith('/tts')&&i>setIdx).length;
+  assert(remTts>=1,'synthesis happens with the pack loaded');
+  // narration after Rem has no weights → no re-load while unchanged
+  const setBefore=calls.filter(u=>u.includes('set_gpt_weights')).length;
+  await sleep(500);
+  const setAfter=w.proxyCalls.filter(c=>c.url.includes('set_gpt_weights')).length;
+  assert.equal(setAfter,setBefore,'no redundant weight loads for voices without packs');
+  console.log('PASS: character packs — weight switching ordered before synthesis, cached while unchanged.');
+  dom.window.close();
+})().catch(e=>{console.error(e);process.exit(1)});

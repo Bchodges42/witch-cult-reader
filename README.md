@@ -4,6 +4,7 @@ A Chrome/Edge extension for [Witch Cult Translations](https://witchculttranslati
 
 ## Layout
 
+- `docs/voice-setup-guide.md` — full download + setup guide for the local AI character voices (GPT-SoVITS install, Re:Zero voice packs, wiring).
 - `work/build.py` — single source of truth. Generates the extension files into `outputs/witch-cult-reader/`.
 - `work/check.cjs` — jsdom test suite against real saved chapter/index pages.
 - `work/chapter.html`, `work/index.html` — saved page fixtures the tests run against.

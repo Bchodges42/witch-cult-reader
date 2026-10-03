@@ -25,6 +25,8 @@ The Device-voices engine is free and instant but robotic. The **Local AI server*
 - **GPT-SoVITS** (recommended) — a voice is defined by a short clip of a character (5–10 seconds of Rem, Subaru, etc.) plus what that clip says. It reads your English text in that character's voice. No per-character training needed: any clean clip works, so grabbing lines from the anime is enough. Runs comfortably on a 6–8 GB GPU (an RTX 3050 is fine).
 - **Style-Bert-VITS2** — per-character model files you download; lighter (~2 GB VRAM). "Load character models" in the panel auto-matches downloaded model names to the chapter's cast.
 
+A fuller version of this guide with download links and troubleshooting lives in `docs/voice-setup-guide.md` in the repository.
+
 ### One-time setup on the desktop (Windows, NVIDIA GPU)
 
 1. Install **GPT-SoVITS** — easiest is the official Windows integrated package from the GitHub releases page (`RVC-Boss/GPT-SoVITS`). Unzip it somewhere like `C:\GPT-SoVITS`.
