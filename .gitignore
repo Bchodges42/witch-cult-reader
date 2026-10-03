@@ -1,0 +1,11 @@
+# build artifacts
+outputs/*.zip
+outputs/witch-cult-reader 2/
+
+# deps
+work/node_modules/
+
+# os / editor
+.DS_Store
+__pycache__/
+*.pyc

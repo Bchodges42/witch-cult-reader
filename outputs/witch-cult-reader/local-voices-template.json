@@ -1,0 +1,10 @@
+{
+  "_readme": "Voice presets for the Local AI server engine. GPT-SoVITS: each voice is {ref, prompt, lang} - a short clip of the character on your desktop plus what the clip says. Style-Bert-VITS2: each voice is {model, style} using model names from its models folder. narrator is required; any character left out falls back to narrator. ??? covers masked speakers.",
+  "narrator": {"ref": "C:/voices/narrator.wav", "prompt": "what the narrator clip says", "lang": "ja"},
+  "Subaru": {"ref": "C:/voices/subaru.wav", "prompt": "what the Subaru clip says", "lang": "ja"},
+  "Emilia": {"ref": "C:/voices/emilia.wav", "prompt": "what the Emilia clip says", "lang": "ja"},
+  "Rem": {"ref": "C:/voices/rem.wav", "prompt": "what the Rem clip says", "lang": "ja"},
+  "Ram": {"ref": "C:/voices/ram.wav", "prompt": "what the Ram clip says", "lang": "ja"},
+  "Beatrice": {"ref": "C:/voices/beatrice.wav", "prompt": "what the Beatrice clip says", "lang": "ja"},
+  "???": {"ref": "C:/voices/mystery.wav", "prompt": "what the mystery clip says", "lang": "ja"}
+}

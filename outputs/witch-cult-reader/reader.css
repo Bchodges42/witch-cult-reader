@@ -1,0 +1,97 @@
+/* ---------- floating panel ---------- */
+#wcr-panel{position:fixed;right:18px;bottom:18px;z-index:2147483647;font:14px/1.5 system-ui,sans-serif;color:#eee}
+#wcr-panel *{box-sizing:border-box}
+#wcr-panel button,#wcr-panel select,#wcr-panel textarea{font:inherit}
+#wcr-panel button{cursor:pointer;border:1px solid #555;border-radius:8px;padding:7px 11px;background:#292631;color:#fff}
+#wcr-controls{width:310px;max-width:calc(100vw - 36px);max-height:75vh;overflow:auto;background:#201e26;padding:18px;border:1px solid #555;border-radius:14px;box-shadow:0 12px 50px #0005;margin-bottom:10px}
+#wcr-controls[hidden]{display:none}
+#wcr-controls header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+#wcr-controls label{display:block;margin:13px 0}
+#wcr-controls input[type=range],#wcr-controls textarea{width:100%}
+#wcr-controls textarea,#wcr-controls select{background:#34313d;color:#fff;border:1px solid #777;border-radius:5px;padding:6px}
+#wcr-controls a{color:#c9b5ff}
+#wcr-controls details p,.wcr-small{font-size:12px;color:#c5becd}
+.wcr-legend{font-size:12px;color:#d8d2e2;background:#2b2833;border-radius:6px;padding:6px 8px}
+#wcr-jump{display:flex;flex-direction:column;gap:2px;background:#2b2833;border:1px solid #443f52;border-radius:8px;padding:9px 11px;margin-bottom:10px}
+#wcr-jump[hidden]{display:none}
+#wcr-jump a{display:flex;flex-direction:column;gap:2px;text-decoration:none}
+#wcr-jump a:hover strong{color:#e6dcff}
+#wcr-jump strong{color:#c9b5ff;font-size:12px;letter-spacing:.3px}
+#wcr-jump span{color:#fff;font-weight:600}
+#wcr-jump em,#wcr-jump small{color:#c5becd;font-style:normal;font-size:12px}
+#wcr-cast{display:flex;flex-wrap:wrap;gap:5px}
+#wcr-cast .wcr-cast-name{border-color:hsl(var(--h,258) 60% 65%)}
+#wcr-panel :focus-visible{outline:3px solid #c7a7ff;outline-offset:3px}
+@media(max-width:600px){#wcr-panel{right:10px;bottom:10px}}
+
+/* ---------- reading typography: applies always, no calm mode needed ---------- */
+.wcr-content{max-width:var(--wcr-width,740px)!important;margin-left:auto!important;margin-right:auto!important;font-family:Georgia,'Times New Roman',serif;font-size:var(--wcr-size,20px)!important;line-height:1.85!important;padding:24px 26px;border-radius:12px}
+.wcr-content p{font-size:inherit!important;line-height:inherit!important}
+
+/* ---------- themes restyle the reading card immediately ---------- */
+body[data-wcr-theme=paper] .wcr-content{background:#f8f1e2;color:#37322a}
+body[data-wcr-theme=light] .wcr-content{background:#fff;color:#242424}
+body[data-wcr-theme=night] .wcr-content{background:#17181d;color:#dcd8cf}
+body[data-wcr-theme=night] .wcr-content :is(p,span:not(.wcr-label),h1,h2,h3,h4,h5,h6,li,td,blockquote,b,strong,i,em){color:inherit!important}
+.wcr-content a{color:#7351a8}
+body[data-wcr-theme=night] .wcr-content a{color:#c4a7ef}
+.wcr-content img{max-width:100%;height:auto}
+
+/* ---------- dialogue / thought / narration ---------- */
+.wcr-label{font-weight:700}
+.wcr-colors .wcr-dialogue{background:hsl(var(--h,258) 60% 55% / .10);border-left:3px solid hsl(var(--h,258) 50% 42%);border-radius:4px;padding:2px 10px}
+.wcr-colors .wcr-dialogue.wcr-unknown{background:hsla(258,12%,50%,.10);border-left-style:dashed;border-left-color:hsla(258,12%,55%,.65)}
+.wcr-colors .wcr-label{color:hsl(var(--h,258) 55% 36%)!important}
+.wcr-colors .wcr-thought{font-style:italic;background:hsla(0,0%,45%,.08);border-left:3px dashed hsla(0,0%,45%,.45);border-radius:4px;padding:2px 10px}
+.wcr-colors .wcr-name{background:hsl(var(--h,258) 70% 75% / .30);border-bottom:2px solid hsl(var(--h,258) 65% 42%);border-radius:3px;padding:0 1px}
+.wcr-colors .wcr-dialogue .wcr-name{background:transparent;border-bottom:2px dotted hsl(var(--h,258) 65% 40%)}
+body[data-wcr-theme=night] .wcr-colors .wcr-dialogue{background:hsl(var(--h,258) 60% 60% / .16);border-left-color:hsl(var(--h,258) 55% 62%)}
+body[data-wcr-theme=night] .wcr-colors .wcr-label{color:hsl(var(--h,258) 70% 74%)!important}
+body[data-wcr-theme=night] .wcr-colors .wcr-name{background:hsl(var(--h,258) 60% 60% / .25);border-bottom-color:hsl(var(--h,258) 65% 68%)}
+
+
+/* ---------- read aloud ---------- */
+#wcr-controls .wcr-actions{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+#wcr-ttsbox summary{cursor:pointer;color:#c9b5ff;font-weight:600;margin:12px 0 6px}
+#wcr-voice-rows{display:flex;flex-direction:column;gap:4px;max-height:220px;overflow:auto;padding-right:4px}
+.wcr-voice-row{display:flex;align-items:center;gap:6px;margin:0}
+.wcr-voice-row .wcr-cast-name{flex:0 0 auto;font-size:12px;padding:4px 8px;border:1px solid hsl(var(--h,258) 60% 65%);border-radius:6px;background:transparent;cursor:default}
+.wcr-voice-row select{flex:1;min-width:0;margin:0}
+.wcr-voice-status{flex:1;min-width:0;font-size:12px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wcr-voice-fallback{color:#8f8899}
+#wcr-local-ui label{margin:10px 0}
+#wcr-local-ui input[type=url]{width:100%;background:#34313d;color:#fff;border:1px solid #777;border-radius:5px;padding:6px}
+#wcr-presets{font:11px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre;resize:vertical}
+#wcr-local-ui .wcr-small{margin-top:8px}
+#wcr-rate-value{color:#c5becd;font-size:12px}
+#wcr-player{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);z-index:2147483647;display:flex;gap:8px;align-items:center;background:#201e26;color:#eee;font:13px/1.4 system-ui,sans-serif;padding:8px 10px;border:1px solid #555;border-radius:999px;box-shadow:0 10px 40px #0006}
+#wcr-player[hidden]{display:none}
+#wcr-player button{cursor:pointer;border:1px solid #666;border-radius:999px;background:#34313d;color:#fff;padding:4px 10px;font:inherit}
+#wcr-player span{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wcr-content .wcr-speaking{outline:2px solid #a88ff0;outline-offset:3px;border-radius:4px}
+body[data-wcr-theme=night] .wcr-content .wcr-speaking{outline-color:#8f7bd6}
+
+/* ---------- resume toast + continue card ---------- */
+#wcr-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:2147483647;display:flex;gap:10px;align-items:center;background:#201e26;color:#eee;font:13px/1.4 system-ui,sans-serif;padding:9px 12px;border:1px solid #555;border-radius:10px;box-shadow:0 10px 40px #0006}
+#wcr-toast button{cursor:pointer;border:1px solid #666;border-radius:6px;background:#34313d;color:#fff;padding:4px 8px;font:inherit}
+#wcr-continue{position:fixed;left:18px;bottom:18px;z-index:2147483647;font:13px/1.4 system-ui,sans-serif;max-width:300px}
+#wcr-continue a{display:flex;flex-direction:column;gap:2px;background:#201e26;color:#eee;text-decoration:none;padding:11px 34px 11px 13px;border:1px solid #555;border-radius:12px;box-shadow:0 10px 40px #0006;position:relative}
+#wcr-continue a:hover,#wcr-continue a:focus-visible{border-color:#c9b5ff}
+#wcr-continue strong{color:#c9b5ff;font-size:12px;letter-spacing:.3px}
+#wcr-continue span{color:#fff;font-weight:600}
+#wcr-continue em{color:#c5becd;font-style:normal;font-size:12px}
+#wcr-continue button{position:absolute;top:6px;right:6px;cursor:pointer;background:transparent;border:0;color:#c5becd;font-size:15px;padding:3px 5px}
+#wcr-continue button:hover{color:#fff}
+@media(max-width:600px){#wcr-continue{left:10px;bottom:10px;max-width:calc(100vw - 20px)}#wcr-toast{bottom:72px;max-width:calc(100vw - 24px)}}
+
+/* ---------- calm reading mode: declutter the site, theme the whole page ---------- */
+.wcr-focus{background:#f5efdf!important;color:#302b25!important}
+.wcr-focus[data-wcr-theme=night]{background:#17181d!important;color:#dcd8cf!important}
+.wcr-focus[data-wcr-theme=light]{background:#fff!important;color:#242424!important}
+.wcr-focus #masthead,.wcr-focus #secondary,.wcr-focus footer,.wcr-focus #comments,.wcr-focus .sharedaddy,.wcr-focus .related-posts{display:none!important}
+.wcr-focus #page,.wcr-focus #content,.wcr-focus #primary,.wcr-focus article,.wcr-focus main{background:transparent!important;color:inherit!important;float:none!important;width:auto!important;max-width:none!important;box-shadow:none!important}
+.wcr-focus #primary{margin:0!important;padding:24px 16px!important}
+.wcr-focus .wcr-content,.wcr-focus .entry-header{max-width:var(--wcr-width,740px)!important;margin:auto!important}
+.wcr-focus .wcr-content{background:transparent!important;padding:0!important;border-radius:0!important;padding-bottom:20vh}
+.wcr-focus .wcr-content p{margin:1.1em 0!important}
+@media(max-width:600px){.wcr-focus #primary{padding:20px 12px!important}}
