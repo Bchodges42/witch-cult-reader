@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Witch Cult Reader",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Per-character dialogue colors, themes, saved position, and a play-style read-aloud reader with local AI character voices (GPT-SoVITS / Style-Bert-VITS2) for Witch Cult Translations.",
   "background": {
     "service_worker": "background.js"

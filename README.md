@@ -37,3 +37,4 @@ For the local AI character voices, see "Local AI character voices" in the extens
 - **1.3.0** — panel shows last arc/chapter with progress; notes removed.
 - **1.4.0** — read aloud (Web Speech): per-character device voices auto-cast by gender, sentence chunking, click-to-read, player pill.
 - **1.5.0** — local AI server engine (GPT-SoVITS api_v2 / Style-Bert-VITS2) via background proxy: per-character voice clips, presets JSON, prefetch playback, server-side speed; keeps device voices as offline fallback.
+- **1.5.1** — trained GPT-SoVITS character packs: presets with `gpt`/`sovits` paths auto-switch weights on speaker change; full voice setup guide (`docs/voice-setup-guide.md`).

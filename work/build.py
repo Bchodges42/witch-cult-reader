@@ -2,7 +2,7 @@ from pathlib import Path
 import json
 p = Path('outputs/witch-cult-reader')
 p.mkdir(parents=True, exist_ok=True)
-p.joinpath('manifest.json').write_text(json.dumps({'manifest_version': 3, 'name': 'Witch Cult Reader', 'version': '1.5.0', 'description': 'Per-character dialogue colors, themes, saved position, and a play-style read-aloud reader with local AI character voices (GPT-SoVITS / Style-Bert-VITS2) for Witch Cult Translations.', 'background': {'service_worker': 'background.js'}, 'host_permissions': ['http://127.0.0.1/*', 'http://localhost/*'], 'content_scripts': [{'matches': ['https://witchculttranslation.com/*'], 'js': ['reader.js'], 'css': ['reader.css'], 'run_at': 'document_idle'}]}, indent=2))
+p.joinpath('manifest.json').write_text(json.dumps({'manifest_version': 3, 'name': 'Witch Cult Reader', 'version': '1.5.1', 'description': 'Per-character dialogue colors, themes, saved position, and a play-style read-aloud reader with local AI character voices (GPT-SoVITS / Style-Bert-VITS2) for Witch Cult Translations.', 'background': {'service_worker': 'background.js'}, 'host_permissions': ['http://127.0.0.1/*', 'http://localhost/*'], 'content_scripts': [{'matches': ['https://witchculttranslation.com/*'], 'js': ['reader.js'], 'css': ['reader.css'], 'run_at': 'document_idle'}]}, indent=2))
 
 p.joinpath('background.js').write_text(r'''// Witch Cult Reader - local TTS proxy. Content scripts on the https site cannot
 // fetch a local http server directly; the service worker can, via host_permissions.
